@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aquatic Debris Collector Control</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background: #f0f4f8; padding: 20px; }
+        button { padding: 15px 25px; font-size: 16px; margin: 10px; border-radius: 8px; border: none; cursor: pointer; }
+        .connect-btn { background: #007bff; color: white; }
+        .scan-btn { background: #28a745; color: white; font-weight: bold; }
+        .grid-container { display: grid; grid-template-columns: repeat(3, 100px); justify-content: center; margin-top: 20px; }
+        .nav-btn { background: #6c757d; color: white; width: 90px; height: 60px; }
+        #camera-feed { width: 100%; max-width: 400px; border-radius: 10px; margin-top: 15px; transform: scaleX(-1); }
+    </style>
+</head>
+<body>
+
+    <h1>🤖 Aquatic Debris Controller</h1>
+    
+    <!-- Bluetooth Connection Status -->
+    <button class="connect-btn" id="connectBtn" onclick="connectBLE()">Connect to Robot 🚀</button>
+    <p id="status">Status: Disconnected ❌</p>
+
+    <!-- Phone Camera Preview Window -->
+    <h3>Phone Camera Tracking Feed:</h3>
+    <video id="camera-feed" autoplay playsinline></video>
+
+    <!-- Manual / Auto Navigation Overlay Buttons -->
+    <div class="grid-container">
+        <div></div>
+        <button class="nav-btn" onclick="sendCommand('FORWARD')">▲ FORWARD</button>
+        <div></div>
+        <button class="nav-btn" onclick="sendCommand('LEFT')">◀ LEFT</button>
+        <button class="scan-btn" onclick="sendCommand('SCAN')">📸 SCAN</button>
+        <button class="nav-btn" onclick="sendCommand('RIGHT')">RIGHT ▶</button>
+        <div></div>
+        <button class="nav-btn" onclick="sendCommand('STOP')">■ STOP</button>
+        <div></div>
+    </div>
+
+    <!-- Isama ang JavaScript Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
