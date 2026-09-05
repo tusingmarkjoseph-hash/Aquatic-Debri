@@ -20,16 +20,17 @@ async function connectBLE() {
     const connectBtn = document.getElementById('connectBtn');
 
     try {
-        statusText.innerText = "Scanning for all nearby BLE devices...";
+        statusText.innerText = "Scanning specifically for Aquatic_Bot...";
         
-        // Pwersahang buksan ang scanner para sa LAHAT ng device nang walang filter sa pangalan
+        // Targetin ang tiyak na pangalan ngayon dahil may scan response payload na tayo
         bleDevice = await navigator.bluetooth.requestDevice({
-            acceptAllDevices: true,
+            filters: [{ name: "Aquatic_Bot" }],
             optionalServices: [SERVICE_UUID] 
         });
 
         statusText.innerText = "Connecting to GATT Server...";
         const server = await bleDevice.gatt.connect();
+        // ... (panatilihin ang natitirang mga linya sa ibaba)
 
         statusText.innerText = "Fetching Service...";
         const service = await server.getPrimaryService(SERVICE_UUID);
