@@ -1,35 +1,23 @@
-// Siguraduhing tugma ang mga UUID sa iyong ESP32-CAM Code
+// Siguraduhing tugma ang SERVICE UUID sa iyong ESP32-CAM Code
 const SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
 const CHARACTERISTIC_UUID_RX = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
 
 let bleDevice = null;
 let rxCharacteristic = null;
 
-// 1. BUKSAN ANG PHONE CAMERA (Para sa object tracking/location isolation)
-async function startPhoneCamera() {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: "environment" } // Gagamitin ang likod na camera ng phone
-        });
-        document.getElementById('camera-feed').srcObject = stream;
-    } catch (err) {
-        console.error("Hindi mabuksan ang camera ng phone: ", err);
-        alert("Pahintulutan ang camera access sa iyong browser setting!");
-    }
-}
-
-// 2. WEB BLUETOOTH CONNECTION ENGINE
 async function connectBLE() {
     const statusText = document.getElementById('status');
     const connectBtn = document.getElementById('connectBtn');
 
     try {
-        statusText.innerText = "Searching for robot...";
+        statusText.innerText = "Scanning for robot...";
         
-        // Mag-request ng Bluetooth Device na kapangalan ng nasa ESP32 code
+        // --- ANG CRITICAL FIX ---
+        // Sinasabi natin sa Web Browser na hanapin ang pangalang "Aquatic_Bot"
+        // AT binibigyan natin ng permiso na i-access ang Service UUID ng robot natin.
         bleDevice = await navigator.bluetooth.requestDevice({
             filters: [{ name: "Aquatic_Bot" }],
-            optionalServices: [SERVICE_UUID]
+            optionalServices: [SERVICE_UUID] // KUNG WALA ITO, HINDI IPAPAKITA NG CHROME ANG ROBOT MO!
         });
 
         statusText.innerText = "Connecting to GATT Server...";
@@ -46,29 +34,12 @@ async function connectBLE() {
         connectBtn.innerText = "Connected! ✅";
         connectBtn.style.background = "#28a745";
 
-        // Simulan ang camera ng telepono kapag konektado na ang Bluetooth
+        // Simulan ang camera ng telepono pagkatapos ng BLE connection
         startPhoneCamera();
 
     } catch (error) {
         console.error("BLE Error: ", error);
-        statusText.innerText = "Connection Failed. Try again.";
+        statusText.innerText = "Connection Failed. " + error.message;
         statusText.style.color = "red";
-    }
-}
-
-// 3. FUNCTION PARA MAGPADALA NG UTOS SA ROBOT (Navigation & AI Trigger)
-async function sendCommand(command) {
-    if (!rxCharacteristic) {
-        alert("Mangyaring kumonekta muna sa Bluetooth ng Robot!");
-        return;
-    }
-
-    try {
-        let encoder = new TextEncoder();
-        // I-convert ang text gaya ng "FORWARD" o "SCAN" papuntang byte array
-        await rxCharacteristic.writeValue(encoder.encode(command));
-        console.log(`Sent command: ${command}`);
-    } catch (error) {
-        console.error("Error sending command: ", error);
     }
 }
