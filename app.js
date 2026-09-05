@@ -28,7 +28,7 @@ async function connectBLE() {
         
         // Mag-request ng Bluetooth Device na kapangalan ng nasa ESP32 code
         bleDevice = await navigator.bluetooth.requestDevice({
-            filters: [{ name: "Aquatic_Debris_Collector" }],
+            filters: [{ name: "Aquatic_Bot" }],
             optionalServices: [SERVICE_UUID]
         });
 
