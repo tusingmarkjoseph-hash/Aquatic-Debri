@@ -1,4 +1,4 @@
-// Siguraduhing tugma ang SERVICE UUID sa iyong ESP32-CAM Code
+// TIYAKING MALIIT NA TITIK (LOWERCASE) LAHAT NG LETTER!
 const SERVICE_UUID = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
 const CHARACTERISTIC_UUID_RX = "6e400002-b5a3-f393-e0a9-e50e24dcca9e";
 
@@ -10,14 +10,12 @@ async function connectBLE() {
     const connectBtn = document.getElementById('connectBtn');
 
     try {
-        statusText.innerText = "Scanning for robot...";
+        statusText.innerText = "Scanning for Aquatic_Bot...";
         
-        // --- ANG CRITICAL FIX ---
-        // Sinasabi natin sa Web Browser na hanapin ang pangalang "Aquatic_Bot"
-        // AT binibigyan natin ng permiso na i-access ang Service UUID ng robot natin.
+        // Piliting hanapin ang Aquatic_Bot kasama ang eksaktong lowercase service ID nito
         bleDevice = await navigator.bluetooth.requestDevice({
             filters: [{ name: "Aquatic_Bot" }],
-            optionalServices: [SERVICE_UUID] // KUNG WALA ITO, HINDI IPAPAKITA NG CHROME ANG ROBOT MO!
+            optionalServices: [SERVICE_UUID] 
         });
 
         statusText.innerText = "Connecting to GATT Server...";
@@ -34,14 +32,12 @@ async function connectBLE() {
         connectBtn.innerText = "Connected! ✅";
         connectBtn.style.background = "#28a745";
 
-        // Simulan ang camera ng telepono pagkatapos ng BLE connection
         startPhoneCamera();
 
-      } catch (error) {
+    } catch (error) {
         console.error("BLE Error: ", error);
-        // IPAPAKITA NITO KUNG ANONG STRICT SECURITY LOCK ANG HUMAHARANG
-        const statusText = document.getElementById('status');
         statusText.innerText = "Error: " + error.name + " -> " + error.message;
         statusText.style.color = "red";
     }
 }
+
