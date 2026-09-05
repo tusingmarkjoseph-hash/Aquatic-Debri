@@ -10,16 +10,19 @@ async function connectBLE() {
     const connectBtn = document.getElementById('connectBtn');
 
     try {
-        statusText.innerText = "Scanning for Aquatic_Bot...";
+        statusText.innerText = "Scanning for nearby devices...";
         
-        // Piliting hanapin ang Aquatic_Bot kasama ang eksaktong lowercase service ID nito
+        // --- ANG "ACCEPT ALL" FIX ---
+        // Sinasabi nito sa Chrome na ipakita ang LAHAT ng Bluetooth devices sa paligid.
+        // Hindi na ito magiging mapili sa pangalan, kaya siguradong lalabas ang robot mo.
         bleDevice = await navigator.bluetooth.requestDevice({
-            filters: [{ name: "Aquatic_Bot" }],
-            optionalServices: [SERVICE_UUID] 
+            acceptAllDevices: true,
+            optionalServices: [SERVICE_UUID] // Kailangan pa rin ito para ma-access ang RX characteristic
         });
 
         statusText.innerText = "Connecting to GATT Server...";
         const server = await bleDevice.gatt.connect();
+        // ... (panatilihin ang natitirang code ng iyong app.js sa ibaba)
 
         statusText.innerText = "Fetching Service...";
         const service = await server.getPrimaryService(SERVICE_UUID);
