@@ -37,9 +37,11 @@ async function connectBLE() {
         // Simulan ang camera ng telepono pagkatapos ng BLE connection
         startPhoneCamera();
 
-    } catch (error) {
+      } catch (error) {
         console.error("BLE Error: ", error);
-        statusText.innerText = "Connection Failed. " + error.message;
+        // IPAPAKITA NITO KUNG ANONG STRICT SECURITY LOCK ANG HUMAHARANG
+        const statusText = document.getElementById('status');
+        statusText.innerText = "Error: " + error.name + " -> " + error.message;
         statusText.style.color = "red";
     }
 }
